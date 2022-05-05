@@ -13,8 +13,12 @@
                         {{ __('Notifications') }}
                     </x-nav-link>
                     
-                    <x-nav-link :href="route('dashboard')">
-                        {{ __('Recherche') }}
+                    <x-nav-link :active="request()->routeIs('searchResult')">
+                        <form method="POST" action="{{route('search')}}">
+                            <input type="text" name="search">
+                            @csrf
+                            <input type="submit" value="Recherche"/>
+                        </form>
                     </x-nav-link>
                 </div>
             </div>

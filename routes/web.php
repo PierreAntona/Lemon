@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\searchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,3 +27,5 @@ require __DIR__.'/auth.php';
 Route::get('/{name}', function () {
     return view('profil');
 })->middleware(['auth'])->name('profil');
+
+Route::post('/search', [searchController::class, 'searchResult'])->middleware(['auth'])->name('search');
