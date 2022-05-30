@@ -31,3 +31,19 @@ Route::get('/{name}', function () {
 Route::post('/postMessage',
     [WallController::class,'postMessage']
 )->middleware(['auth'])->name('postMessage');
+
+Route::get('/postPage/{id}',
+    [WallController::class,'postPage']
+)->middleware(['auth'])->name('postPage');
+
+Route::get('/deletePost/{id}',
+    [wallController::class,'deletePost']
+)->middleware(['auth'])->name('deletePost');
+
+Route::get('/updatePost/{id}',
+    [wallController::class,'updatePost']
+)->middleware(['auth'])->name('updatePost');
+
+Route::post('/updatePost/{id}',
+    [wallController::class,'savePost']
+)->middleware(['auth'])->name('savePost');

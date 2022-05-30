@@ -16,13 +16,15 @@
                         <input type="file" name="media"/>
                         <input type="submit"/><br>
                     <b>Posts</b> : <br>
-                    <ul>
-                        @foreach($posts as $post)
+                    @foreach($posts as $post)
+                        <a href="{{route('postPage', $post->id)}}"><ul>
                             <li>{{$post->owner}} _ {{$post->content}}</li>
-                            <p><?php getcwd()?></p>
+                            @if($post->media)
                             <img src="{{url('storage/media/'.$post->media)}}" alt="Image"/>
+                            @endif
+
+                        </ul></a>
                         @endforeach
-                    </ul>
                 </div>
             </div>
         </div>

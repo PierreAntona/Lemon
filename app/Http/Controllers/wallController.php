@@ -20,17 +20,51 @@ class wallController extends Controller
         }
         $post = new Post;
 
-        $file=Storage::put('public/media', $resquest->media);
-        $file=str_replace('public/media', '', $file);
+
         $post->content = $resquest->message;
         $post-> owner = Auth::id();
         if ($resquest->media) {
+            $file=Storage::put('public/media', $resquest->media);
+            $file=str_replace('public/media', '', $file);
             $post->media= $file ;
+
         }
         $post->save();
         $resquest->session()->flash('success','posted on the wall !');
         return redirect()->route('dashboard');
     }
 
+    public function postPage(Request $resquest){
+        $post = Post::findOrFail($resquest->id);
+        return view('posts', ['post' => $post]);
+    }
 
+    public function deletePost(Request $resquest){
+        $post = Post::findOrFail($resquest->id);
+        if(Auth::id() != $post->owner){
+            abort(404);
+        }
+        $post->delete();
+
+
+        return redirect()->route('dashboard');
+    }
+
+    public function updatePost(Request $resquest){
+        $post = Post::findOrFail($resquest->id);
+        if(Auth::id() != $post->owner){
+            abort(404);
+        }
+        return view('updatePost', ['post' => $post]);
+    }
+
+    public function savePost(Request $resquest){
+        $post = Post::find($resquest->id);
+        if(Auth::id() != $post->owner){
+            abort(404);
+        }
+        $post->content = $resquest->content;
+        $post->save();
+        return redirect()->route('dashboard');
+    }
 }

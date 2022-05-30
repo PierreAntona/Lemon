@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('content');
             $table->integer('owner');
+            $table->integer('mediaType')->nullable();
             $table->string('media')->nullable();
             $table->timestamps();
         });
