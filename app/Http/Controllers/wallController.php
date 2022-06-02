@@ -14,6 +14,10 @@ class wallController extends Controller
         return view('dashboard', ['posts' => $posts]);
     }
 
+    public function isImageOrVideo($typeVideo) {
+        dd($typeVideo);
+    }
+
     public function postMessage(Request $resquest,$parentPost = 0){
         if (empty($resquest->message)) {
             return redirect('dashboard')->with('error','message vide');
@@ -24,11 +28,20 @@ class wallController extends Controller
         $post->content = $resquest->message;
         $post->owner = Auth::id();
         if ($resquest->media) {
-            $file=Storage::put('public/media', $resquest->media);
-
-            $file=str_replace('public/media', '', $file);
-            $post->media= $file ;
-            $post->mediaType= 'video' ;
+            $uploadType = $resquest->media->getMimeType();
+            // dd($resquest->media);
+                if(in_array($uploadType, array("image/jpeg", "video/webm", "video/mp4", "image/jpg", "image/gif", "image/png"))) {
+                    dd($resquest->media);
+                    $file=Storage::put('', $resquest->media);
+                    dd("a^pres");
+                    $file=str_replace('public/media', '', $file);
+                    $post->media= $file ;
+                    // dd("ici");
+                    $type = isImageOrVideo($uploadType);
+                    $post->mediaType= 'image';
+                } else {
+                    abort(422, "pas le bon format");
+                }
             // storage/media/
             /*$mime = mime_content_type('storage/media/'.$file);
             if(strstr($mime, "video/")){
@@ -48,6 +61,7 @@ class wallController extends Controller
         }
         return redirect()->route('dashboard');
     }
+
 
     public function postPage(Request $resquest){
         $post = Post::findOrFail($resquest->id);
