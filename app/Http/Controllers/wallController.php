@@ -14,29 +14,45 @@ class wallController extends Controller
         return view('dashboard', ['posts' => $posts]);
     }
 
-    public function postMessage(Request $resquest){
+    public function postMessage(Request $resquest,$parentPost = 0){
         if (empty($resquest->message)) {
             return redirect('dashboard')->with('error','message vide');
         }
         $post = new Post;
 
-
+        $post->parentPost=$parentPost;
         $post->content = $resquest->message;
-        $post-> owner = Auth::id();
+        $post->owner = Auth::id();
         if ($resquest->media) {
             $file=Storage::put('public/media', $resquest->media);
+
             $file=str_replace('public/media', '', $file);
             $post->media= $file ;
+            $post->mediaType= 'video' ;
+            // storage/media/
+            /*$mime = mime_content_type('storage/media/'.$file);
+            if(strstr($mime, "video/")){
+                $post->media= $file ;
+            }else if(strstr($mime, "image/")){
+            }else{
+                Storage::delete('storage/media/'.$file);
+                return redirect('dashboard')->with('error','erreur fichier');
+            }*/
 
         }
         $post->save();
         $resquest->session()->flash('success','posted on the wall !');
+        if ($parentPost!=0) {
+
+            return redirect()->route('postPage',$parentPost);
+        }
         return redirect()->route('dashboard');
     }
 
     public function postPage(Request $resquest){
         $post = Post::findOrFail($resquest->id);
-        return view('posts', ['post' => $post]);
+        $comment = Post::all();
+        return view('posts', ['post' => $post, 'comments' => $comment]);
     }
 
     public function deletePost(Request $resquest){

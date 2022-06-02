@@ -17,14 +17,23 @@
                         <input type="submit"/><br>
                     <b>Posts</b> : <br>
                     @foreach($posts as $post)
-                        <a href="{{route('postPage', $post->id)}}"><ul>
-                            <li>{{$post->owner}} _ {{$post->content}}</li>
-                            @if($post->media)
-                            <img src="{{url('storage/media/'.$post->media)}}" alt="Image"/>
-                            @endif
+                        @if($post->parentPost==0)
+                            <a href="{{route('postPage', $post->id)}}"><ul>
+                                <li>{{$post->owner}} _ {{$post->content}}</li>
+                                @if($post->media)
+                                    @if($post->mediaType=='image')
+                                        <img src="{{url('storage/media/'.$post->media)}}" alt="Image"/>
+                                    @elseif($post->mediaType=='video')
+                                    <video width="320" height="240" controls>
+                                        <source src="{{url('storage/media/'.$post->media)}}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    @endif
+                                @endif
 
-                        </ul></a>
-                        @endforeach
+                            </ul></a>
+                        @endif
+                    @endforeach
                 </div>
             </div>
         </div>

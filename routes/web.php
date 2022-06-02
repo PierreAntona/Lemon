@@ -28,7 +28,7 @@ Route::get('/{name}', function () {
 })->middleware(['auth'])->name('profil');
 
 
-Route::post('/postMessage',
+Route::post('/postMessage/{parentPost?}',
     [WallController::class,'postMessage']
 )->middleware(['auth'])->name('postMessage');
 

@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->integer('parentPost');
             $table->string('content');
             $table->integer('owner');
-            $table->integer('mediaType')->nullable();
+            $table->string('mediaType')->nullable();
             $table->string('media')->nullable();
             $table->timestamps();
         });

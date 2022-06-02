@@ -15,6 +15,25 @@
                     <a href="{{route('updatePost', $post->id)}}"><b>#Modifier#</b></a>
                     <a href="{{route('deletePost', $post->id)}}"><b>#Supprimer#</b></a>
                 </div>
+                <div class="p-6 bg-white border-b border-gray-200">
+                    Commentaires #{{ $post->id }}<br>
+                    <form method="POST"  enctype="multipart/form-data" action="{{route('postMessage',$post->id)}}">
+@csrf
+                        <input type="text" name="message"/>
+                        <input type="file" name="media"/>
+                        <input type="submit"/><br>
+                        @foreach($comments as $comment)
+                            @if($post->id==$comment->parentPost)
+                                <a href="{{route('postPage', $comment->id)}}"><ul>
+                                    <li>{{$comment->owner}} _ {{$comment->content}}</li>
+                                    @if($post->media)
+                                    <img src="{{url('storage/media/'.$comment->media)}}" alt="Image"/>
+                                    @endif
+
+                                </ul></a>
+                            @endif
+                        @endforeach
+                </div>
             </div>
         </div>
     </div>
