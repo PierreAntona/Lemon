@@ -24,13 +24,22 @@ class wallController extends Controller
         $post->content = $resquest->message;
         $post->owner = Auth::id();
         if ($resquest->media) {
-            $file=Storage::put('public/media', $resquest->media);
+           /* $file=Storage::put('public/media', $resquest->media);
 
             $file=str_replace('public/media', '', $file);
             $post->media= $file ;
-            $post->mediaType= 'video' ;
-
-
+            $post->mediaType= 'video' ;*/
+            $uploadType = $resquest->media->getMimeType();
+            if(in_array($uploadType, array("image/jpeg", "video/webm", "video/mp4", "image/jpg", "image/gif", "image/png"))) {
+                $file=Storage::put('public/media', $resquest->media);
+                $file=str_replace('public/media', '', $file);
+                $post->media= $file ;
+                // dd("ici");
+                $type = str_contains($uploadType , 'image') ? 'image' : 'video';
+                $post->mediaType= $type;
+            } else {
+                abort(422, "pas le bon format");
+            }
         }
         $post->save();
         $resquest->session()->flash('success','posted on the wall !');
