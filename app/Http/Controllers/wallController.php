@@ -14,9 +14,7 @@ class wallController extends Controller
         return view('dashboard', ['posts' => $posts]);
     }
 
-    public function isImageOrVideo($typeVideo) {
-        dd($typeVideo);
-    }
+
 
     public function postMessage(Request $resquest,$parentPost = 0){
         if (empty($resquest->message)) {
@@ -31,14 +29,12 @@ class wallController extends Controller
             $uploadType = $resquest->media->getMimeType();
             // dd($resquest->media);
                 if(in_array($uploadType, array("image/jpeg", "video/webm", "video/mp4", "image/jpg", "image/gif", "image/png"))) {
-                    dd($resquest->media);
                     $file=Storage::put('', $resquest->media);
-                    dd("a^pres");
                     $file=str_replace('public/media', '', $file);
                     $post->media= $file ;
                     // dd("ici");
-                    $type = isImageOrVideo($uploadType);
-                    $post->mediaType= 'image';
+                    $type = str_contains($uploadType , 'image') ? 'image' : 'video';
+                    $post->mediaType= $type;
                 } else {
                     abort(422, "pas le bon format");
                 }
