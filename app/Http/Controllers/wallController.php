@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class wallController extends Controller
 {
     public function index(){
-        $posts = Post::all();
+        $posts = Post::where('parentPost',0)->get();
         return view('dashboard', ['posts' => $posts]);
     }
 
@@ -29,15 +29,7 @@ class wallController extends Controller
             $file=str_replace('public/media', '', $file);
             $post->media= $file ;
             $post->mediaType= 'video' ;
-            // storage/media/
-            /*$mime = mime_content_type('storage/media/'.$file);
-            if(strstr($mime, "video/")){
-                $post->media= $file ;
-            }else if(strstr($mime, "image/")){
-            }else{
-                Storage::delete('storage/media/'.$file);
-                return redirect('dashboard')->with('error','erreur fichier');
-            }*/
+
 
         }
         $post->save();
@@ -51,7 +43,7 @@ class wallController extends Controller
 
     public function postPage(Request $resquest){
         $post = Post::findOrFail($resquest->id);
-        $comment = Post::all();
+        $comment = Post::where('parentPost',$resquest->id)->get();
         return view('posts', ['post' => $post, 'comments' => $comment]);
     }
 

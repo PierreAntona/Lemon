@@ -23,7 +23,6 @@
                         <input type="file" name="media"/>
                         <input type="submit"/><br>
                         @foreach($comments as $comment)
-                            @if($post->id==$comment->parentPost)
                                 <a href="{{route('postPage', $comment->id)}}"><ul>
                                     <li>{{$comment->owner}} _ {{$comment->content}}</li>
                                     @if($post->media)
@@ -31,7 +30,6 @@
                                     @endif
 
                                 </ul></a>
-                            @endif
                         @endforeach
                 </div>
             </div>
