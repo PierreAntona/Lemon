@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,8 +22,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+
 require __DIR__.'/auth.php';
 
 Route::get('/{name}', function () {
     return view('profil');
 })->middleware(['auth'])->name('profil');
+
+Route::get('profile', 'UserProfileController@show')->middleware('auth')->name('profile.show');
+Route::post('profile', [UserProfileController::class, 'update'])->middleware('auth')->name('profile.update');

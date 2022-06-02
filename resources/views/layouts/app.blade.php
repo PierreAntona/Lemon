@@ -16,7 +16,7 @@
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased" id="app">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
@@ -30,6 +30,10 @@
             <!-- Page Content -->
             <main>
                 {{ $slot }}
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <img src="/uploads/avatars/{{ Auth::user()->avatar }}" style="width:32px; height:32px; position:absolute; top:10px; left:10px; border-radius:50%">
+                {{ Auth::user()->name }} <span class="user_img"></span>
+            </a>
             </main>
         </div>
     </body>
