@@ -22,7 +22,7 @@ class wallController extends Controller
 
         $post->parentPost=$parentPost;
         $post->content = $resquest->message;
-        $post->owner = Auth::id();
+        $post->owner = Auth::user()->name;
         if ($resquest->media) {
            /* $file=Storage::put('public/media', $resquest->media);
 
@@ -58,7 +58,7 @@ class wallController extends Controller
 
     public function deletePost(Request $resquest){
         $post = Post::findOrFail($resquest->id);
-        if(Auth::id() != $post->owner){
+        if(Auth::user()->name != $post->owner){
             abort(404);
         }
         $post->delete();
@@ -69,7 +69,7 @@ class wallController extends Controller
 
     public function updatePost(Request $resquest){
         $post = Post::findOrFail($resquest->id);
-        if(Auth::id() != $post->owner){
+        if(Auth::user()->name != $post->owner){
             abort(404);
         }
         return view('updatePost', ['post' => $post]);
@@ -77,7 +77,7 @@ class wallController extends Controller
 
     public function savePost(Request $resquest){
         $post = Post::find($resquest->id);
-        if(Auth::id() != $post->owner){
+        if(Auth::user()->name != $post->owner){
             abort(404);
         }
         $post->content = $resquest->content;
