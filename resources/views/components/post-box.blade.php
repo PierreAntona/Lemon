@@ -16,7 +16,7 @@
                     <x-heroicon-o-location-marker class="h-5 w-5" />
                 </div>
 
-                <input type="submit" class="bg-emerald-500 px-5 py-2 font-bold text-white rounded-full disabled:opacity-40 cursor-pointer" value="Poster" />
+                <input type="submit" class="bg-emerald-500 px-5 py-2 font-bold text-white rounded-full cursor-pointer" value="Poster" />
             </div>
         </form>
     </div>
