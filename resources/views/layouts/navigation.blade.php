@@ -6,11 +6,11 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Accueil') }}
+                        <x-heroicon-o-home class="w-8 h-8 text-[#6bbf6a]"/>
                     </x-nav-link>
                     
                     <x-nav-link :href="route('dashboard')">
-                        {{ __('Notifications') }}
+                        <x-heroicon-o-bell class="w-8 h-8 text-[#6bbf6a]"/>
                     </x-nav-link>
                     
                     <x-nav-link :active="request()->routeIs('searchResult')">

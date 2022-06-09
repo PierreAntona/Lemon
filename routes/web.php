@@ -24,9 +24,7 @@ Route::get('/dashboard', [WallController::class, 'index'])->middleware(['auth'])
 
 require __DIR__.'/auth.php';
 
-Route::get('/{name}', function () {
-    return view('profil');
-})->middleware(['auth'])->name('profil');
+Route::get('/{name}', [WallController::class, 'profil'])->middleware(['auth'])->name('profil');
 
 Route::post('/search', [searchController::class, 'searchResult'])->middleware(['auth'])->name('search');
 

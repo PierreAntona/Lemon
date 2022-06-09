@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,7 +12,15 @@ class wallController extends Controller
 {
     public function index(){
         $posts = Post::where('parentPost',0)->get();
-        return view('dashboard', ['posts' => $posts]);
+        $comments = Post::where('parentPost','>',0)->get();
+        return view('dashboard', ['posts' => $posts, 'comments' => $comments]);
+    }
+
+    public function profil(Request $request){
+        $profil = User::where('name',$request->name)->get();
+        $posts = Post::where('owner', $request->name)->get();
+        $comments = Post::where('parentPost','>',0)->get();
+        return view('profil', ['profil' => $profil, 'posts' => $posts, 'comments' => $comments]);
     }
 
     public function postMessage(Request $resquest,$parentPost = 0){
@@ -19,10 +28,9 @@ class wallController extends Controller
             return redirect('dashboard')->with('error','message vide');
         }
         $post = new Post;
-
         $post->parentPost=$parentPost;
         $post->content = $resquest->message;
-        $post->owner = Auth::id();
+        $post->owner = Auth::user()->name;
         if ($resquest->media) {
            /* $file=Storage::put('public/media', $resquest->media);
 
@@ -44,7 +52,6 @@ class wallController extends Controller
         $post->save();
         $resquest->session()->flash('success','posted on the wall !');
         if ($parentPost!=0) {
-
             return redirect()->route('postPage',$parentPost);
         }
         return redirect()->route('dashboard');
@@ -58,7 +65,7 @@ class wallController extends Controller
 
     public function deletePost(Request $resquest){
         $post = Post::findOrFail($resquest->id);
-        if(Auth::id() != $post->owner){
+        if(Auth::user()->name != $post->owner){
             abort(404);
         }
         $post->delete();
@@ -69,7 +76,7 @@ class wallController extends Controller
 
     public function updatePost(Request $resquest){
         $post = Post::findOrFail($resquest->id);
-        if(Auth::id() != $post->owner){
+        if(Auth::user()->name != $post->owner){
             abort(404);
         }
         return view('updatePost', ['post' => $post]);
@@ -77,7 +84,7 @@ class wallController extends Controller
 
     public function savePost(Request $resquest){
         $post = Post::find($resquest->id);
-        if(Auth::id() != $post->owner){
+        if(Auth::user()->name != $post->owner){
             abort(404);
         }
         $post->content = $resquest->content;
