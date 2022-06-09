@@ -47,7 +47,7 @@
                     </div>
                     @foreach($posts as $post)
                     @foreach($subscribers as $subscriber)
-                    @if($post->owner == Auth::user()->name || ($post->owner == $subscriber->user && Auth::user()->name == $subscriber->follower))
+                    @if(($post->owner == $subscriber->user && Auth::user()->name == $subscriber->follower))
                     <div class="flex flex-col space-x-3 border-y p-5 border-gray-100 ">
                         @if($post->parentPost==0)
                         <div class="flex space-x-3 ">

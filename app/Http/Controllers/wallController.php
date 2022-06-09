@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Subscriber;
 use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -26,8 +27,7 @@ class wallController extends Controller
         $subscriber = Subscriber::where('user',  $profil[0]->name)->get()->count();
         $subscription = Subscriber::where('follower', $profil[0]->name)->get()->count();
         $estAbonne = Subscriber::where([['user',  $profil[0]->name],['follower',  Auth::user()->name]])->get()->count();
-        // $estAbonne = Subscriber::findOrFail('follower', )
-        return view('profil', ['profil' => $profil, 'posts' => $posts, 'comments' => $comments, 'subscriber' => $subscriber, 'subscription' => $subscription,'estAbonne' => $estAbonne]);
+        return view('profil', ['profil' => $profil, 'posts' => $posts, 'comments' => $comments, 'subscriber' => $subscriber-1, 'subscription' => $subscription - 1,'estAbonne' => $estAbonne]);
     }
 
     public function follow(Request $request){
@@ -36,6 +36,11 @@ class wallController extends Controller
         $subscriber->follower = Auth::user()->name;
         $subscriber->save();
         $profil = User::where('name',$request->user)->get()->firstOrFail();
+        $notif = new Notification;
+        $notif->owner = $request->user;
+        $notif->provider = Auth::user()->name;
+        $notif->content = Auth::user()->name." s'est abonné à votre profil.";
+        $notif->save();
         return redirect()->route('profil',$profil->name);
     }
 
@@ -99,7 +104,15 @@ class wallController extends Controller
         }
         $post->save();
         $resquest->session()->flash('success','posted on the wall !');
+       
         if ($parentPost!=0) {
+            $notif = new Notification;
+            $UserParentPost = Post::where('id',$parentPost)->get()->firstOrFail();
+            $notifOwner = $UserParentPost->owner;
+            $notif->owner = $notifOwner;
+            $notif->provider = Auth::user()->name;
+            $notif->content = Auth::user()->name." a commenté votre post.";
+            $notif->save();
             return redirect()->route('postPage',$parentPost);
         }
         return redirect()->route('dashboard');
@@ -139,6 +152,11 @@ class wallController extends Controller
         $post->content = $resquest->content;
         $post->save();
         return redirect()->route('dashboard');
+    }
+
+    public function notif(Request $request){
+        $notif = Notification::where('owner',Auth::user()->name)->get();
+        return view('notif', ['notif' => $notif]);
     }
 
 }

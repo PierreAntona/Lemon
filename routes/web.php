@@ -64,3 +64,5 @@ Route::get('/updatePost/{id}',
 Route::post('/updatePost/{id}',
     [wallController::class,'savePost']
 )->middleware(['auth'])->name('savePost');
+
+Route::get('/notif/{user}',[WallController::class, 'notif'])->middleware(['auth'])->name('notif');
