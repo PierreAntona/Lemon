@@ -29,14 +29,14 @@
                     <form method="POST"  enctype="multipart/form-data" action="{{route('follow',$info->name)}}">
                     @csrf
                     @if($info->name != Auth::user()->name)
-                    <input type="submit" value="S'abonner"/><br>
+                    <input class="cursor-pointer text-emerald-500 font-bold" type="submit" value="S'abonner"/><br>
                     @endif
                     </form>
                 @else
                     <form method="POST"  enctype="multipart/form-data" action="{{route('unfollow',$info->name)}}">
                     @csrf
                     @if($info->name != Auth::user()->name)
-                    <input type="submit" value="Se désabonner"/><br>
+                    <input class="cursor-pointer text-emerald-500 font-bold" type="submit" type="submit" value="Se désabonner"/><br>
                     @endif
                     </form>
                 @endif
