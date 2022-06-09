@@ -26,6 +26,14 @@ require __DIR__.'/auth.php';
 
 Route::get('/{name}', [WallController::class, 'profil'])->middleware(['auth'])->name('profil');
 
+Route::get('/editProfil/{name}',
+    [wallController::class,'editProfil']
+)->middleware(['auth'])->name('editProfil');
+
+Route::post('/updateProfil/{name}',
+    [wallController::class,'updateProfil']
+)->middleware(['auth'])->name('updateProfil');
+
 Route::post('/search', [searchController::class, 'searchResult'])->middleware(['auth'])->name('search');
 
 Route::post('/postMessage/{parentPost?}',

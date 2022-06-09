@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Storage;
 class wallController extends Controller
 {
     public function index(){
+
+        $profil = User::all();
         $posts = Post::where('parentPost',0)->get();
         $comments = Post::where('parentPost','>',0)->get();
-        return view('dashboard', ['posts' => $posts, 'comments' => $comments]);
+        return view('dashboard', ['profil' => $profil, 'posts' => $posts, 'comments' => $comments]);
     }
 
     public function profil(Request $request){
@@ -21,6 +23,25 @@ class wallController extends Controller
         $posts = Post::where('owner', $request->name)->get();
         $comments = Post::where('parentPost','>',0)->get();
         return view('profil', ['profil' => $profil, 'posts' => $posts, 'comments' => $comments]);
+    }
+
+    public function editProfil(Request $request){
+        $profil = User::where('name',$request->name)->get();
+        return view('editProfil', ['profil' => $profil]);
+    }
+
+    public function updateProfil(Request $request){
+        $profil = User::where('name', Auth::user()->name)->first();
+        $uploadType = $request->media->getMimeType();
+        if(in_array($uploadType, array("image/jpeg", "video/webm", "video/mp4", "image/jpg", "image/gif", "image/png"))) {
+            $file=Storage::put('public/profil', $request->media);
+            $file=str_replace('public/profil', '', $file);
+            $profil->photo= $file;
+        } else {
+            abort(422, "pas le bon format");
+        }
+        $profil->save();
+        return redirect()->route('dashboard');
     }
 
     public function postMessage(Request $resquest,$parentPost = 0){
@@ -58,9 +79,10 @@ class wallController extends Controller
     }
 
     public function postPage(Request $resquest){
+        $profil = User::where('name',Auth::user()->name)->get();
         $post = Post::findOrFail($resquest->id);
         $comment = Post::where('parentPost',$resquest->id)->get();
-        return view('posts', ['post' => $post, 'comments' => $comment]);
+        return view('posts', ['post' => $post, 'comments' => $comment, 'profil' => $profil]);
     }
 
     public function deletePost(Request $resquest){
@@ -91,4 +113,5 @@ class wallController extends Controller
         $post->save();
         return redirect()->route('dashboard');
     }
+
 }
