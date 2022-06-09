@@ -16,7 +16,11 @@
             @foreach($profil as $info)
             <div class="py-4 mx-6 border-y border-emerald-500 text-lg font-bold flex justify-between items-center">
                 <div class="flex items-center">
-                    <img class="h-16 w-16 rounded-full object-cover mr-4" src='https://links.papareact.com/gll' alt="" />
+                @if($info->photo)
+                        <img src="{{url('storage/profil/'.$info->photo)}}" class="h-16 w-16 rounded-full object-cover mr-4" alt="" />
+                        @else
+                        <img src="https://links.papareact.com/gll" class="h-14 w-14 object-cover rounded-full mt-4" alt="" />
+                        @endif
                     <p class="text-2xl">{{ $info->name }}</p>
                 </div>
                 <b> {{$subscriber}} Abonnés </b>
@@ -37,7 +41,9 @@
                     </form>
                 @endif
                 @if($info->name == Auth::user()->name)
+                <a href="{{ route('editProfil', Auth::user()->name) }}">
                 <x-heroicon-o-pencil-alt class="w-5 h-5 cursor-pointer" />
+                </a>
                 @endif
             </div>
             <div class="m-6 text-lg font-bold">
@@ -47,7 +53,13 @@
             <div class="mx-6 flex flex-col space-x-3 border-y p-5 border-gray-100 ">
                 @if($post->parentPost==0)
                 <div class="flex space-x-3 ">
-                    <a href="{{ route('profil', $post->owner) }}"><img class="h-10 w-10 rounded-full object-cover" src='https://links.papareact.com/gll' alt="" /></a>
+                    <a href="{{ route('profil', $post->owner) }}">
+                    @if($info->photo)
+                        <img src="{{url('storage/profil/'.$info->photo)}}" class="h-10 w-10 rounded-full object-cover" alt="" />
+                        @else
+                        <img src="https://links.papareact.com/gll" class="h-14 w-14 object-cover rounded-full mt-4" alt="" />
+                        @endif
+                    </a>
                     <div class="w-full">
                         <div class="flex w-full justify-between items-center space-x-1">
                             <p class="mr-1 font-bold">{{$post->owner}}</p>

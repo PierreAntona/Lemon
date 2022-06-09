@@ -20,7 +20,13 @@
             @isset($result)
             @foreach($result as $oneResult)
             <div class="flex mx-6 mt-4" >
-                <a href="{{ route('profil', $oneResult->name) }}"><img class="h-10 w-10 rounded-full object-cover mr-4" src='https://links.papareact.com/gll' alt="" /></a>
+                <a href="{{ route('profil', $oneResult->name) }}">
+                    @if($oneResult->photo)
+                        <img src="{{url('storage/profil/'.$oneResult->photo)}}" class="h-10 w-10 rounded-full object-cover mr-4" alt="" />
+                        @elseif(!$oneResult->photo)
+                        <img src="https://links.papareact.com/gll" class="h-10 w-10 rounded-full object-cover mr-4" alt="" />
+                    @endif
+                </a>
                 <div class="w-full">
                     <div class="flex w-full justify-between items-center space-x-1">
                         <p class="mr-1 font-bold">{{ $oneResult->name }}</p>
