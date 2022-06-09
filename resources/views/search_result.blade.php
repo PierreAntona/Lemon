@@ -24,9 +24,9 @@
                 <div class="w-full">
                     <div class="flex w-full justify-between items-center space-x-1">
                         <p class="mr-1 font-bold">{{ $oneResult->name }}</p>
-                        <form action="">
+                        <form action="{{route('profil',$oneResult->name)}}">
                         @csrf
-                            <input type="submit" class=" px-5 py-2 font-bold text-emerald-500 rounded-full border border-emerald-500 cursor-pointer" value="Suivre" />
+                            <input type="submit" class=" px-5 py-2 font-bold text-emerald-500 rounded-full border border-emerald-500 cursor-pointer" value="Voir" />
                         </form>
 
                     </div>

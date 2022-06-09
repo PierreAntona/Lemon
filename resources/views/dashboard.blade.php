@@ -18,7 +18,9 @@
                 <div class="overflow-hidden shadow-sm sm:rounded-lg">
                     @include('components.post-box')
                     @foreach($posts as $post)
-                    <div class="flex flex-col space-x-3 border-y p-5 border-gray-100 ">
+                        @foreach($subscribers as $subscriber)
+                            @if(($post->owner == $subscriber->user) && Auth::user()->name == $subscriber->follower)
+                              <div class="flex flex-col space-x-3 border-y p-5 border-gray-100 ">
                         @if($post->parentPost==0)
                         <div class="flex space-x-3 ">
                         <a href="{{ route('profil', $post->owner) }}"><img class="h-10 w-10 rounded-full object-cover" src='https://links.papareact.com/gll' alt="" /></a>
@@ -81,10 +83,10 @@
                                         <p class='mr-1 font-bold'>{{$comment->owner}}</p>
                                         <p class="text-sm text-gray-500">{{$comment->created_at}}</p>
                                     </div>
-                                        <!-- @if($comment->media)
+                                      @if($comment->media)
                                         <img class="m-5 ml-0 mb-1 max-h-60 rounded-lg object-cover shadow-sm" src="{{url('storage/media/'.$post->media)}}" alt="Image" />
-                                        @endif -->
-                                    <p>{{$comment->content}}</p>
+                                        @endif
+                                        <p>{{$comment->content}}</p>
                                 </div>
                             </div>
                         </div>
@@ -92,6 +94,8 @@
                         @endforeach
                         @endif
                     </div>
+                            @endif
+                        @endforeach
                     @endforeach
                 </div>
             </div>

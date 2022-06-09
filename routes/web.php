@@ -32,6 +32,15 @@ Route::post('/postMessage/{parentPost?}',
     [WallController::class,'postMessage']
 )->middleware(['auth'])->name('postMessage');
 
+Route::post('/follow/{user?}',
+    [WallController::class,'follow']
+)->middleware(['auth'])->name('follow');
+
+Route::post('/unfollow/{user?}',
+    [WallController::class,'unfollow']
+)->middleware(['auth'])->name('unfollow');
+
+
 Route::get('/postPage/{id}',
     [WallController::class,'postPage']
 )->middleware(['auth'])->name('postPage');

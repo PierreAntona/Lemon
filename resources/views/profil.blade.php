@@ -3,7 +3,6 @@
         @include('components.sidebar')
 
         <div class=" w-full flex flex-col py-2">
-
             <div class="px-8 py-4 w-full flex justify-between items-center">
                 <h1 class="px-4 text-2xl font-bold text-emerald-500">Profil</h1>
                 <form class="flex items-center" method="POST" action="{{route('search')}}">
@@ -20,7 +19,23 @@
                     <img class="h-16 w-16 rounded-full object-cover mr-4" src='https://links.papareact.com/gll' alt="" />
                     <p class="text-2xl">{{ $info->name }}</p>
                 </div>
-
+                <b> {{$subscriber}} Abonnés </b>
+                <b> {{$subscription}} Abonnement </b>
+                @if($estAbonne == 0)
+                    <form method="POST"  enctype="multipart/form-data" action="{{route('follow',$info->name)}}">
+                    @csrf
+                    @if($info->name != Auth::user()->name)
+                    <input type="submit" value="S'abonner"/><br>
+                    @endif
+                    </form>
+                @else
+                    <form method="POST"  enctype="multipart/form-data" action="{{route('unfollow',$info->name)}}">
+                    @csrf
+                    @if($info->name != Auth::user()->name)
+                    <input type="submit" value="Se désabonner"/><br>
+                    @endif
+                    </form>
+                @endif
                 @if($info->name == Auth::user()->name)
                 <x-heroicon-o-pencil-alt class="w-5 h-5 cursor-pointer" />
                 @endif
