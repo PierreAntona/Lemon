@@ -1,5 +1,10 @@
+@foreach($profil as $info)
 <div class="flex space-x-2 p-5">
+    @if($info->photo)
     <img src="https://links.papareact.com/gll" } class="h-14 w-14 object-cover rounded-full mt-4" alt="" />
+    @else
+    <img src="https://links.papareact.com/gll" } class="h-14 w-14 object-cover rounded-full mt-4" alt="" />
+    @endif
     <div class="flex flex-1 items-center pl-2">
         <form method="POST" enctype="multipart/form-data" action="{{route('postMessage')}}" class="flex flex-1 flex-col">
             @csrf
@@ -21,3 +26,4 @@
         </form>
     </div>
 </div>
+@endforeach

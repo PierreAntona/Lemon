@@ -12,7 +12,7 @@
         <p class="group-hover:text-emerald-500 hidden md:inline-flex text-base lg:text-xl">Profil</p>
     </a>
 
-    <a href="" class="flex items-center space-x-2 px-4 py-3 rounded-lg hover:bg-gray-100 cursor-pointer transition-all duration-200 group max-w-fit">
+    <a href="{{ route('notif', Auth::user()->name) }}" class="flex items-center space-x-2 px-4 py-3 rounded-lg hover:bg-gray-100 cursor-pointer transition-all duration-200 group max-w-fit">
         <x-heroicon-o-bell class="h-6 w-6" />
         <p class="group-hover:text-emerald-500 hidden md:inline-flex text-base lg:text-xl">Notifications</p>
     </a>

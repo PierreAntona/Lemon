@@ -16,12 +16,50 @@
             </div>
             <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 ">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg">
-                    @include('components.post-box')
+                    <div class="flex space-x-2 p-5">
+                        @foreach($profil as $info)
+                        @if($info->name == Auth::user()->name && $info->photo)
+                        <img src="{{url('storage/profil/'.$info->photo)}}" class="h-14 w-14 object-cover rounded-full mt-4" alt="" />
+                        @elseif($info->name == Auth::user()->name && !$info->photo)
+                        <img src="https://links.papareact.com/gll" class="h-14 w-14 object-cover rounded-full mt-4" alt="" />
+                        @endif
+                        @endforeach
+                        <div class="flex flex-1 items-center pl-2">
+                            <form method="POST" enctype="multipart/form-data" action="{{route('postMessage')}}" class="flex flex-1 flex-col">
+                                @csrf
+                                <input type="text" name="message" class="h-24 w-full text-xl outline-none placeholder:text-xl" placeholder="Quoi de neuf ?" />
+                                <div class="flex items-center mt-2">
+                                    <div class="flex space-x-2 flex-1 text-emerald-500">
+                                        <label for="media" class="">
+                                            <x-heroicon-o-photograph class="w-5 h-5 cursor-pointer transition-transform duration-150 ease-out hover:scale-150" />
+                                            <input type="file" name="media" id="media" style="display: none;" />
+                                        </label>
+                                        <x-heroicon-o-search class="h-5 w-5" />
+                                        <x-heroicon-o-emoji-happy class="h-5 w-5" />
+                                        <x-heroicon-o-calendar class="h-5 w-5" />
+                                        <x-heroicon-o-location-marker class="h-5 w-5" />
+                                    </div>
+
+                                    <input type="submit" class="bg-emerald-500 px-5 py-2 font-bold text-white rounded-full cursor-pointer" value="Poster" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     @foreach($posts as $post)
+                    @foreach($subscribers as $subscriber)
+                    @if(($post->owner == $subscriber->user && Auth::user()->name == $subscriber->follower))
                     <div class="flex flex-col space-x-3 border-y p-5 border-gray-100 ">
                         @if($post->parentPost==0)
                         <div class="flex space-x-3 ">
-                        <a href="{{ route('profil', $post->owner) }}"><img class="h-10 w-10 rounded-full object-cover" src='https://links.papareact.com/gll' alt="" /></a>
+                            <a href="{{ route('profil', $post->owner) }}">
+                                @foreach($profil as $info)
+                                @if($info->name == $post->owner && $info->photo)
+                                <img class="h-10 w-10 rounded-full object-cover" src="{{url('storage/profil/'.$info->photo)}}" alt="" />
+                                @elseif($info->name == $post->owner && !$info->photo)
+                                <img class="h-10 w-10 rounded-full object-cover" src='https://links.papareact.com/gll' alt="" />
+                                @endif
+                                @endforeach
+                            </a>
                             <div class="w-full">
                                 <div class="flex w-full justify-between items-center space-x-1">
                                     <p class="mr-1 font-bold">{{$post->owner}}</p>
@@ -47,7 +85,6 @@
                         <div class="mt-5 flex justify-between">
                             <div class="flex cursor-pointer items-center space-x-3 text-gray-400">
                                 <x-heroicon-o-chat-alt-2 class="h-5 w-5" />
-                                <p>0</p>
                             </div>
                             <div class="flex cursor-pointer items-center space-x-3 text-gray-400">
                                 <x-heroicon-o-switch-horizontal class="h-5 w-5" />
@@ -81,9 +118,9 @@
                                         <p class='mr-1 font-bold'>{{$comment->owner}}</p>
                                         <p class="text-sm text-gray-500">{{$comment->created_at}}</p>
                                     </div>
-                                        <!-- @if($comment->media)
-                                        <img class="m-5 ml-0 mb-1 max-h-60 rounded-lg object-cover shadow-sm" src="{{url('storage/media/'.$post->media)}}" alt="Image" />
-                                        @endif -->
+                                    @if($comment->media)
+                                    <img class="m-5 ml-0 mb-1 max-h-60 rounded-lg object-cover shadow-sm" src="{{url('storage/media/'.$post->media)}}" alt="Image" />
+                                    @endif
                                     <p>{{$comment->content}}</p>
                                 </div>
                             </div>
@@ -92,6 +129,8 @@
                         @endforeach
                         @endif
                     </div>
+                    @endif
+                    @endforeach
                     @endforeach
                 </div>
             </div>
